@@ -2,4 +2,12 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {}
+--
+M = {
+  require 'custom/plugins/oil-nvim',
+  require 'custom/plugins/blink',
+  require 'custom/plugins/gp',
+  require 'custom/plugins/harpoon',
+}
+
+return M

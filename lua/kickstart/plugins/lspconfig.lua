@@ -1,5 +1,7 @@
 -- LSP Plugins
-return {
+--
+
+M = {
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -28,8 +30,11 @@ return {
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
+      'b0o/schemastore.nvim',
     },
     config = function()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      require('lspconfig').lua_ls.setup { capabilities = capabilities }
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -189,7 +194,7 @@ return {
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
+        omnisharp = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -201,6 +206,57 @@ return {
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
+            },
+          },
+        },
+        yamlls = {
+          -- Have to add this for yamlls to understand that we support line folding
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+              },
+            },
+          },
+          -- lazy-load schemastore when needed
+          on_new_config = function(new_config)
+            new_config.settings.yaml.schemas = vim.tbl_deep_extend('force', new_config.settings.yaml.schemas or {}, require('schemastore').yaml.schemas())
+          end,
+          settings = {
+            redhat = { telemetry = { enabled = false } },
+            yaml = {
+              keyOrdering = false,
+              format = {
+                enable = true,
+              },
+              validate = true,
+              schemaStore = {
+                -- Must disable built-in schemaStore support to use
+                -- schemas from SchemaStore.nvim plugin
+                enable = false,
+                -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                url = '',
+              },
+              customTags = {
+                '!Fn',
+                '!And',
+                '!If',
+                '!Not',
+                '!Equals sequence',
+                '!Or',
+                '!FindInMap sequence',
+                '!Base64',
+                '!Cidr',
+                '!Ref map',
+                '!Sub',
+                '!GetAtt',
+                '!GetAZs',
+                '!ImportValue',
+                '!Select',
+                '!Split',
+                '!Join sequence',
+              },
             },
           },
         },
@@ -240,4 +296,6 @@ return {
     end,
   },
 }
+
+return M
 -- vim: ts=2 sts=2 sw=2 et
