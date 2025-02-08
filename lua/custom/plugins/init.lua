@@ -4,10 +4,10 @@
 -- See the kickstart.nvim README for more information
 --
 M = {
-  require 'custom/plugins/oil-nvim',
-  require 'custom/plugins/blink',
-  require 'custom/plugins/gp',
-  require 'custom/plugins/harpoon',
+  -- require 'custom/plugins/oil-nvim',
+  -- require 'custom/plugins/blink',
+  -- require 'custom/plugins/gp',
+  -- require 'custom/plugins/harpoon',
 }
 
 return M
