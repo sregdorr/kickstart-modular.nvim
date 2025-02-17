@@ -28,11 +28,15 @@ M = {
       -- Useful status updates for LSP.
       { 'j-hui/fidget.nvim', opts = {} },
 
-      -- Allows extra capabilities provided by nvim-cmp
-      -- 'hrsh7th/cmp-nvim-lsp',
+      -- Schemas for yamlls
       'b0o/schemastore.nvim',
+
+      -- OmniSharp dotnet lsp
+      'Hoffs/omnisharp-extended-lsp.nvim',
     },
     config = function()
+      -- require('lspconfig').lua_ls.setup { capabilities = capabilities }
+
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -170,6 +174,7 @@ M = {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
+      -- capabilities = vim.tbl_deep_extend('force', extended_capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -197,21 +202,29 @@ M = {
         intelephense = {
           settings = {},
         },
-        -- omnisharp = {
-        --   settings = {
-        --     enable_editor_config_support = true,
-        --     organize_imports = true,
-        --     load_projects_on_demand = false,
-        --     enable_analyzers_support = true,
-        --     enable_import_completion = true,
-        --     include_prerelease_sdks = true,
-        --     analyze_open_documents_only = false,
-        --     enable_package_auto_restore = true,
-        --   },
-        -- },
-        -- csharp_ls = {
-        --   settings = {},
-        -- },
+        omnisharp = {
+          handlers = {
+            ['textDocument/definition'] = function(...)
+              return require('omnisharp_extended').handler(...)
+            end,
+          },
+          keys = {
+            {
+              'gd',
+              require('omnisharp_extended').telescope_lsp_definitions(),
+              desc = 'Goto Definition',
+            },
+          },
+          enable_roslyn_analyzers = true,
+          organize_imports_on_format = true,
+          enable_import_completion = true,
+          enable_completion_support = true,
+          server_use_net6 = true,
+          filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
+          root_dir = function()
+            return vim.loop.cwd()
+          end,
+        },
         ts_ls = {
           init_options = {
             plugins = {
