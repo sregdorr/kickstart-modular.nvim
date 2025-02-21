@@ -8,9 +8,6 @@ M = {
         'icon',
       },
     },
-    keys = {
-      { 'n', '-', '<cmd>Oil<CR>' },
-    },
     -- Optional dependencies
     -- dependencies = { { 'echasnovski/mini.icons', opts = {} } },
     dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if you prefer nvim-web-devicons
@@ -18,5 +15,7 @@ M = {
     lazy = false,
   },
 }
+
+vim.keymap.set('n', '-', '<cmd>Oil<CR>')
 
 return M
