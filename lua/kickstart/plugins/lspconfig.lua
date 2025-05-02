@@ -189,11 +189,14 @@ M = {
       local servers = {
         -- clangd = {},
         gopls = {
-          analyses = {
-            unusedparams = true,
+          capabilities = capabilities,
+          settings = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
           },
-          staticcheck = true,
-          gofumpt = true,
         },
         -- pyright = {},
         -- rust_analyzer = {},
