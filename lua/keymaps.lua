@@ -66,7 +66,7 @@ vim.keymap.set('n', '<space>ts', function()
   vim.api.nvim_win_set_height(0, 15)
 end)
 
-vim.keymap.set('n', '<space><space>x', '<cmd>source %<CR>')
+vim.keymap.set('n', '<space><space>x', ':source %<CR>')
 vim.keymap.set('n', '<space>x', ':.lua<CR>')
 vim.keymap.set('v', '<space>x', ':lua<CR>')
 

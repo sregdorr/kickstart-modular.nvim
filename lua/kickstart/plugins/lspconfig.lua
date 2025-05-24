@@ -240,6 +240,20 @@ M = {
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        templ = {
+          filetypes = { 'templ' },
+        },
+        tailwindcss = {
+          filetypes = { 'templ' },
+          init_options = { userLanguages = { templ = 'html' } },
+        },
+        html = {
+          filetypes = { 'html', 'templ' },
+        },
+        astro = {},
+        -- htmx = {
+        --   filetypes = { 'html', 'templ' },
+        -- },
         intelephense = {
           settings = {},
         },
@@ -278,7 +292,7 @@ M = {
           },
           filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
-        volar = {},
+        -- volar = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
