@@ -230,6 +230,10 @@ M = {
             gofumpt = true,
           },
         },
+        elixirls = {
+          dialyzerEnabled = false,
+          fetchDeps = false,
+        },
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -275,7 +279,7 @@ M = {
           enable_import_completion = true,
           enable_completion_support = true,
           server_use_net6 = true,
-          filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
+          filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets', '.razor' },
           root_dir = function()
             return vim.loop.cwd()
           end,
