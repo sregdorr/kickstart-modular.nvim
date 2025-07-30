@@ -30,35 +30,6 @@ return {
           },
         },
         opts = {},
-        keys = {
-          {
-            '<C-L>',
-            function()
-              require('luasnip').jump(1)
-            end,
-            mode = { 'i', 's' },
-            silent = true,
-          },
-          {
-            '<C-J>',
-            function()
-              require('luasnip').jump(-1)
-            end,
-            mode = { 'i', 's' },
-            silent = true,
-          },
-          {
-            '<C-E>',
-            function()
-              local ls = require 'luasnip'
-              if ls.choice_active() then
-                ls.change_choice(1)
-              end
-            end,
-            mode = { 'i', 's' },
-            silent = true,
-          },
-        },
       },
       'folke/lazydev.nvim',
     },
@@ -87,10 +58,22 @@ return {
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'none',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+
+        -- Define custom keymaps
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        ['<C-e>'] = { 'hide' },
+        ['<C-n>'] = { 'select_next', 'fallback' },
+        ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<Up>'] = { 'select_prev', 'fallback' },
+        ['<Down>'] = { 'select_next', 'fallback' },
+        ['<C-y>'] = { 'accept', 'fallback' },
+
+        ['<C-l>'] = { 'snippet_forward', 'fallback' },
+        ['<C-j>'] = { 'snippet_backward', 'fallback' },
       },
 
       appearance = {

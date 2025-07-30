@@ -13,10 +13,12 @@ return {
     -- NOTE: And you can specify dependencies as well
     dependencies = {
       -- Creates a beautiful debugger UI
-      'rcarriga/nvim-dap-ui',
+      {
+        'rcarriga/nvim-dap-ui',
+        dependencies = { 'nvim-neotest/nvim-nio' },
+      },
 
-      -- Required dependency for nvim-dap-ui
-      'nvim-neotest/nvim-nio',
+      'theHamsta/nvim-dap-virtual-text',
 
       -- Installs the debug adapters for you
       'williamboman/mason.nvim',
@@ -68,6 +70,13 @@ return {
           require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
         end,
         desc = 'Debug: Set Breakpoint',
+      },
+      {
+        '<leader>bc',
+        function()
+          require('dapui').close()
+        end,
+        desc = 'Debug: Close',
       },
       -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
       {
@@ -129,21 +138,45 @@ return {
         },
       }
 
-      dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-      dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-      dap.listeners.before.event_exited['dapui_config'] = dapui.close
+      local dap, dapui = require 'dap', require 'dapui'
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
 
       -- Install golang specific config
+      -- require('dap-go').setup()
       require('dap-go').setup {
         delve = {
           -- On Windows delve must be run attached or it crashes.
           -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
           detached = vim.fn.has 'win32' == 0,
+          build_flags = '',
         },
         tests = {
           verbose = false,
         },
+        dap_configurations = {
+          {
+            type = 'go',
+            name = 'Debug Current Directory',
+            request = 'launch',
+            program = '${fileDirname}',
+          },
+        },
       }
+
+      -- Setup DAP virtual text
+      require('nvim-dap-virtual-text').setup {}
+      vim.g.dap_virtual_text = true
     end,
   },
 }
